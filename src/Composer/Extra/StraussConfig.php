@@ -261,7 +261,15 @@ class StraussConfig
      */
     public function setVendorDirectory(string $vendorDirectory): void
     {
-        $this->vendorDirectory = $vendorDirectory;
+        $this->vendorDirectory = trim(
+            preg_replace(
+                '/[\/\\\\]+/',
+                DIRECTORY_SEPARATOR,
+                $vendorDirectory
+            ),
+            DIRECTORY_SEPARATOR
+        )
+            . DIRECTORY_SEPARATOR ;
     }
 
     /**

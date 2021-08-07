@@ -92,6 +92,7 @@ class FileEnumerator
 
             $packagePath = $this->workingDir . $this->vendorDir
                 . $dependency->getPath() . DIRECTORY_SEPARATOR;
+            $packagePath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $packagePath);
 
             /**
              * Where $dependency->autoload is ~
@@ -130,13 +131,13 @@ class FileEnumerator
                     // else it is a directory.
 
                     // trailingslashit().
-                    $namespace_relative_path = rtrim($namespace_relative_path, DIRECTORY_SEPARATOR)
+                    $namespace_relative_path = rtrim($namespace_relative_path, DIRECTORY_SEPARATOR . '\\/')
                         . DIRECTORY_SEPARATOR;
 
                     $sourcePath = $packagePath . $namespace_relative_path;
 
                     // trailingslashit(). (to remove duplicates).
-                    $sourcePath = rtrim($sourcePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                    $sourcePath = rtrim($sourcePath, DIRECTORY_SEPARATOR . '\\/') . DIRECTORY_SEPARATOR;
 
                     $finder = new Finder();
                     $finder->files()->in($sourcePath)->followLinks();

@@ -17,9 +17,10 @@ class ProjectComposerPackage extends ComposerPackage
 
     public function __construct(string $absolutePath, array $overrideAutoload = null)
     {
+        $absolutePath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $absolutePath);
         if (is_dir($absolutePath)) {
             $absolutePathDir = $absolutePath;
-            $absolutePathFile = rtrim($absolutePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'composer.json';
+            $absolutePathFile = rtrim($absolutePath, DIRECTORY_SEPARATOR . '\\/') . DIRECTORY_SEPARATOR . 'composer.json';
         } else {
             $absolutePathDir = rtrim($absolutePath, 'composer.json');
             $absolutePathFile = $absolutePath;
@@ -39,6 +40,7 @@ class ProjectComposerPackage extends ComposerPackage
 
         $vendorDirectory = $this->composer->getConfig()->get('vendor-dir');
         if (is_string($vendorDirectory)) {
+            $vendorDirectory = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $vendorDirectory);
             $vendorDirectory = str_replace($absolutePathDir, '', (string) $vendorDirectory);
             $this->vendorDirectory = $vendorDirectory;
         } else {
