@@ -25,7 +25,7 @@ class Cleanup
     {
         $this->vendorDirectory = $config->getVendorDirectory();
 
-        $this->isDeleteVendorFiles = $config->isDeleteVendorFiles();
+        $this->isDeleteVendorFiles = $config->isDeleteVendorFiles() && $config->getTargetDirectory() !== $config->getVendorDirectory();
         
         $this->filesystem = new Filesystem(new Local($workingDir));
     }
@@ -38,9 +38,6 @@ class Cleanup
      */
     public function cleanup(array $sourceFiles)
     {
-
-        // TODO Don't do this if vendor is the target dir (i.e. in-situ updating).
-
         if ($this->isDeleteVendorFiles) {
             foreach ($sourceFiles as $sourceFile) {
                 $relativeFilepath = $this->vendorDirectory . $sourceFile;
