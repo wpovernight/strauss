@@ -26,7 +26,7 @@ class ProjectComposerPackage extends ComposerPackage
         }
         unset($absolutePath);
 
-        $composer = Factory::create(new NullIO(), $absolutePathFile);
+        $composer = Factory::create(new NullIO(), $absolutePathFile, true);
 
         parent::__construct($composer, $overrideAutoload);
 
