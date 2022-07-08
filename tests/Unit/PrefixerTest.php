@@ -1423,15 +1423,15 @@ EOD;
     }
 
 
-	/**
-	 *
-	 * @see https://github.com/BrianHenryIE/strauss/issues/36
-	 *
-	 */
-	public function testItReplacesStaticInsideSquareArray(): void
-	{
+    /**
+     *
+     * @see https://github.com/BrianHenryIE/strauss/issues/36
+     *
+     */
+    public function testItReplacesStaticInsideSquareArray(): void
+    {
 
-		$contents = <<<'EOD'
+        $contents = <<<'EOD'
 namespace ST;
 class StraussTestPackage {
 	public function __construct() {
@@ -1444,7 +1444,7 @@ class StraussTestPackage {
 }
 EOD;
 
-		$expected = <<<'EOD'
+        $expected = <<<'EOD'
 namespace StraussTest\ST;
 class StraussTestPackage {
 	public function __construct() {
@@ -1457,24 +1457,24 @@ class StraussTestPackage {
 }
 EOD;
 
-		$config = $this->createMock(StraussConfig::class);
+        $config = $this->createMock(StraussConfig::class);
 
-		$replacer = new Prefixer($config, __DIR__);
+        $replacer = new Prefixer($config, __DIR__);
 
-		$result = $replacer->replaceNamespace($contents, 'ST', 'StraussTest\\ST');
+        $result = $replacer->replaceNamespace($contents, 'ST', 'StraussTest\\ST');
 
-		$this->assertEquals($expected, $result);
-	}
+        $this->assertEquals($expected, $result);
+    }
 
-	/**
-	 *
-	 * @see https://github.com/BrianHenryIE/strauss/issues/44
-	 *
-	 */
-	public function testItReplacesStaticInsideMultilineTernary(): void
-	{
+    /**
+     *
+     * @see https://github.com/BrianHenryIE/strauss/issues/44
+     *
+     */
+    public function testItReplacesStaticInsideMultilineTernary(): void
+    {
 
-		$contents = <<<'EOD'
+        $contents = <<<'EOD'
 namespace GuzzleHttp;
 
 use Psr\Http\Message\MessageInterface;
@@ -1493,7 +1493,7 @@ final class BodySummarizer implements BodySummarizerInterface
 }
 EOD;
 
-		$expected = <<<'EOD'
+        $expected = <<<'EOD'
 namespace StraussTest\GuzzleHttp;
 
 use Psr\Http\Message\MessageInterface;
@@ -1512,14 +1512,12 @@ final class BodySummarizer implements BodySummarizerInterface
 }
 EOD;
 
-		$config = $this->createMock(StraussConfig::class);
+        $config = $this->createMock(StraussConfig::class);
 
-		$replacer = new Prefixer($config, __DIR__);
+        $replacer = new Prefixer($config, __DIR__);
 
-		$result = $replacer->replaceNamespace($contents, 'GuzzleHttp', 'StraussTest\\GuzzleHttp');
+        $result = $replacer->replaceNamespace($contents, 'GuzzleHttp', 'StraussTest\\GuzzleHttp');
 
-		$this->assertEquals($expected, $result);
-	}
-
-
+        $this->assertEquals($expected, $result);
+    }
 }
