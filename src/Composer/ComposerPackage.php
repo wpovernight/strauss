@@ -69,7 +69,7 @@ class ComposerPackage
             $absolutePath = rtrim($absolutePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'composer.json';
         }
 
-        $composer = Factory::create(new NullIO(), $absolutePath);
+        $composer = Factory::create(new NullIO(), $absolutePath, true);
 
         return new ComposerPackage($composer, $overrideAutoload);
     }
