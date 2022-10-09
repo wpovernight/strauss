@@ -72,6 +72,7 @@ class ChangeEnumerator
      */
     public function getDiscoveredClasses(): array
     {
+        unset($this->discoveredClasses['ReturnTypeWillChange']);
         return array_keys($this->discoveredClasses);
     }
 

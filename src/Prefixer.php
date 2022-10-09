@@ -98,6 +98,10 @@ class Prefixer
         }
 
         foreach ($classes as $originalClassname) {
+            if ('ReturnTypeWillChange' === $originalClassname) {
+                continue;
+            }
+
             $classmapPrefix = $this->classmapPrefix;
 
             $contents = $this->replaceClassname($contents, $originalClassname, $classmapPrefix);
