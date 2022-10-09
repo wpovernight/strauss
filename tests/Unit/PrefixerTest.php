@@ -507,6 +507,32 @@ EOD;
     }
 
     /**
+     * Trying to prefix standard namespace `Dragon`, e.g. `Dragon\Form` with `Dragon\Dependencies` results in
+     * `Dragon\Dependencies\Dragon\Dependencies\Dragon\Form`.
+     *
+     * This was not the cause of the issue (i.e. this test, pretty much identical to the one above, passed immediately).
+     *
+     * @see https://github.com/BrianHenryIE/strauss/issues/47
+     */
+    public function testDoesNotDoublePrefixAlreadyUpdatedNamespace(): void
+    {
+
+        $contents = 'namespace Dargon\\Dependencies\\Dragon\\Form;';
+
+        $namespace = "Dragon";
+        $prefix = "Dargon\\Dependencies\\";
+        $replacement = $prefix . $namespace;
+
+        $config = $this->createMock(StraussConfig::class);
+
+        $replacer = new Prefixer($config, __DIR__);
+        $result = $replacer->replaceNamespace($contents, $namespace, $replacement);
+
+        $this->assertNotEquals('namespace Dargon\\Dependencies\\Dargon\\Dependencies\\Dragon\\Form;', $result);
+        $this->assertEquals('namespace Dargon\\Dependencies\\Dragon\\Form;', $result);
+    }
+
+    /**
      * @author markjaquith
      */
     public function test_it_doesnt_double_replace_namespaces_that_also_exist_inside_another_namespace(): void
