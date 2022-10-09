@@ -31,6 +31,13 @@ class MozartIssue109Test extends IntegrationTestCase
   "require": {
     "nesbot/carbon":"1.39.0"
   },
+  "config": {
+    "process-timeout": 0,
+    "sort-packages": true,
+    "allow-plugins": {
+        "kylekatarnls/update-helper": true
+    }
+  },
   "extra": {
     "mozart": {
       "dep_namespace": "Mozart\\",

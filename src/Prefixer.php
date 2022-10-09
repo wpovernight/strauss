@@ -87,6 +87,8 @@ class Prefixer
     public function replaceInString(array $namespacesChanges, array $classes, array $originalConstants, string $contents): string
     {
 
+        // Reorder this so substrings are always ahead of what they might be substrings of.
+        asort($namespacesChanges);
         foreach ($namespacesChanges as $originalNamespace => $replacement) {
             if (in_array($originalNamespace, $this->excludeNamespacesFromPrefixing)) {
                 continue;
