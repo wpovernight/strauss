@@ -125,17 +125,15 @@ Strauss uses Composer's own tools to generate a classmap file in the `target_dir
 require_once __DIR__ . '/strauss/autoload.php';
 ```
 
-If you prefer to use Composer's autoloader, add your `target_directory` to the `classmap` and strauss will not create its own `autoload.php`. `psr-4` autoloading is not straightforward with Strauss's approach to copying files, so stick with Mozart for that.
+If you prefer to use Composer's autoloader, add your `target_directory` (default `vendor-prefixed`) to your `autoload` `classmap` and Strauss will not create its own `autoload.php` when run. Then run `composer dump-autoload` to include the newly copied and prefixed files in Composer's own classmap.
 
-```json
+```
 "autoload": {
     "classmap": [
-        "src",
-        "strauss"
-    ]   
+        "vendor-prefixed/"
+    ]
 },
 ```
-
 
 ## Motivation & Comparison to Mozart
 
