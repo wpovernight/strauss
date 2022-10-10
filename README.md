@@ -57,7 +57,7 @@ Strauss potentially requires zero configuration, but likely you'll want to custo
 ```json
 "extra": {
     "strauss": {
-        "target_directory": "strauss",
+        "target_directory": "vendor-prefixed",
         "namespace_prefix": "BrianHenryIE\\My_Project\\",
         "classmap_prefix": "BrianHenryIE_My_Project_",
         "constant_prefix": "BHMP_",
@@ -91,7 +91,7 @@ Strauss potentially requires zero configuration, but likely you'll want to custo
 
 The following configuration is inferred:
 
-- `target_directory` defines the directory the files will be copied to
+- `target_directory` defines the directory the files will be copied to, default `vendor-prefixed`
 - `namespace_prefix` defines the default string to prefix each namespace with
 - `classmap_prefix` defines the default string to prefix class names in the global namespace
 - `packages` is the list of packages to process. If absent, all packages in the `require` key of your `composer.json` are included
