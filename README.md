@@ -8,6 +8,12 @@ A fork of [Mozart](https://github.com/coenjacobs/mozart/). For [Composer](https:
 
 The primary use case is WordPress plugins, where different plugins active in a single WordPress install could each include different versions of the same library. The version of the class loaded would be whichever plugin registered the autoloader first, and all subsequent instantiations of the class will use that version, with potentially unpredictable behaviour and missing functionality.    
 
+## Breaking Changes
+
+* v0.12.0 – default output `target_directory` changes from `strauss` to `vendor-prefixed`
+
+Please open issues to suggest possible breaking changes. I think we can probably move to 1.0.0 soon. 
+
 ## Use
 
 Require as normal with Composer:
