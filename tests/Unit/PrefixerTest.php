@@ -1448,6 +1448,34 @@ EOD;
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * @see https://github.com/BrianHenryIE/strauss/issues/48
+     * @see https://php.watch/versions/8.1/ReturnTypeWillChange
+     */
+    public function testItDoesNotPrefixReturnTypeWillChangeAsClassname(): void
+    {
+
+        $contents = <<<'EOD'
+namespace Symfony\Polyfill\Intl\Normalizer;
+class NA
+{
+	#[\ReturnTypeWillChange]
+    public function offsetGet(mixed $offset) {}
+}
+EOD;
+
+        $originalClassname = 'Normalizer';
+        $classnamePrefix = 'Normalizer_Test_';
+
+        $config = $this->createMock(StraussConfig::class);
+        $config->method("getClassmapPrefix")->willReturn($classnamePrefix);
+
+        $replacer = new Prefixer($config, __DIR__);
+
+        $result = $replacer->replaceInString([], [$originalClassname,'ReturnTypeWillChange'], [], $contents);
+
+        $this->assertEquals($contents, $result);
+    }
 
     /**
      *

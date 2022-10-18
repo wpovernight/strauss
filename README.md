@@ -8,6 +8,12 @@ A fork of [Mozart](https://github.com/coenjacobs/mozart/). For [Composer](https:
 
 The primary use case is WordPress plugins, where different plugins active in a single WordPress install could each include different versions of the same library. The version of the class loaded would be whichever plugin registered the autoloader first, and all subsequent instantiations of the class will use that version, with potentially unpredictable behaviour and missing functionality.    
 
+## Breaking Changes
+
+* v0.12.0 – default output `target_directory` changes from `strauss` to `vendor-prefixed`
+
+Please open issues to suggest possible breaking changes. I think we can probably move to 1.0.0 soon. 
+
 ## Use
 
 Require as normal with Composer:
@@ -19,7 +25,7 @@ and use `vendor/bin/strauss` to execute.
 Or, download `strauss.phar` from [releases](https://github.com/BrianHenryIE/strauss/releases/), 
 
 ```shell
-curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/download/0.11.0/strauss.phar
+curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/download/0.11.1/strauss.phar
 ```
 
 Then run it from the root of your project folder using `php strauss.phar`. 
@@ -57,7 +63,7 @@ Strauss potentially requires zero configuration, but likely you'll want to custo
 ```json
 "extra": {
     "strauss": {
-        "target_directory": "strauss",
+        "target_directory": "vendor-prefixed",
         "namespace_prefix": "BrianHenryIE\\My_Project\\",
         "classmap_prefix": "BrianHenryIE_My_Project_",
         "constant_prefix": "BHMP_",
@@ -91,7 +97,7 @@ Strauss potentially requires zero configuration, but likely you'll want to custo
 
 The following configuration is inferred:
 
-- `target_directory` defines the directory the files will be copied to
+- `target_directory` defines the directory the files will be copied to, default `vendor-prefixed`
 - `namespace_prefix` defines the default string to prefix each namespace with
 - `classmap_prefix` defines the default string to prefix class names in the global namespace
 - `packages` is the list of packages to process. If absent, all packages in the `require` key of your `composer.json` are included
@@ -125,17 +131,15 @@ Strauss uses Composer's own tools to generate a classmap file in the `target_dir
 require_once __DIR__ . '/strauss/autoload.php';
 ```
 
-If you prefer to use Composer's autoloader, add your `target_directory` to the `classmap` and strauss will not create its own `autoload.php`. `psr-4` autoloading is not straightforward with Strauss's approach to copying files, so stick with Mozart for that.
+If you prefer to use Composer's autoloader, add your `target_directory` (default `vendor-prefixed`) to your `autoload` `classmap` and Strauss will not create its own `autoload.php` when run. Then run `composer dump-autoload` to include the newly copied and prefixed files in Composer's own classmap.
 
-```json
+```
 "autoload": {
     "classmap": [
-        "src",
-        "strauss"
-    ]   
+        "vendor-prefixed/"
+    ]
 },
 ```
-
 
 ## Motivation & Comparison to Mozart
 

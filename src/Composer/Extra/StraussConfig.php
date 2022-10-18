@@ -19,7 +19,7 @@ class StraussConfig
      *
      * @var string
      */
-    protected $targetDirectory = 'strauss';
+    protected $targetDirectory = 'vendor-prefixed';
 
     /**
      * The vendor directory.
