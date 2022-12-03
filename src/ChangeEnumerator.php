@@ -93,7 +93,7 @@ class ChangeEnumerator
 
         foreach ($relativeFilepaths as $relativeFilepath => $package) {
             foreach ($this->excludePackagesFromPrefixing as $excludePackagesName) {
-                if ($package->getName() === $excludePackagesName) {
+                if ( $package->getPackageName() === $excludePackagesName) {
                     continue 2;
                 }
             }

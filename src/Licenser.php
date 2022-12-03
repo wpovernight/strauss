@@ -115,7 +115,7 @@ class Licenser
 
         /** @var ComposerPackage $dependency */
         foreach ($this->dependencies as $dependency) {
-            $packagePath = $this->vendorDir . $dependency->getPath();
+            $packagePath = $this->vendorDir . $dependency->getRelativePath();
 
             // If packages happen to have their vendor dir, i.e. locally required packages, don't included the licenses
             // from their vendor dir (they should be included otherwise anyway).
@@ -131,7 +131,7 @@ class Licenser
                 // Replace multiple \ and/or / with OS native DIRECTORY_SEPARATOR.
                 $relativeFilepath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $relativeFilepath);
 
-                $this->discoveredLicenseFiles[$relativeFilepath] = $dependency->getName();
+                $this->discoveredLicenseFiles[$relativeFilepath] = $dependency->getPackageName();
             }
         }
     }

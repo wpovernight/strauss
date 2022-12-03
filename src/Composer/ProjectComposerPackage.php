@@ -32,7 +32,7 @@ class ProjectComposerPackage extends ComposerPackage
 
         $authors = $this->composer->getPackage()->getAuthors();
         if (empty($authors) || !isset($authors[0]['name'])) {
-            $this->author = explode("/", $this->name, 2)[0];
+            $this->author = explode("/", $this->packageName, 2)[0];
         } else {
             $this->author = $authors[0]['name'];
         }

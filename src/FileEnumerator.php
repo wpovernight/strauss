@@ -86,12 +86,12 @@ class FileEnumerator
         $prefixToRemove = $this->workingDir . $this->vendorDir;
 
         foreach ($this->dependencies as $dependency) {
-            if (in_array($dependency->getName(), $this->excludePackageNames)) {
+            if (in_array($dependency->getPackageName(), $this->excludePackageNames)) {
                 continue;
             }
 
             $packagePath = $this->workingDir . $this->vendorDir
-                . $dependency->getPath() . DIRECTORY_SEPARATOR;
+                . $dependency->getRelativePath() . DIRECTORY_SEPARATOR;
 
             /**
              * Where $dependency->autoload is ~
@@ -108,7 +108,7 @@ class FileEnumerator
                 // Might have to switch/case here.
 
                 if ('files' === $type) {
-                    $this->filesAutoloaders[$dependency->getPath()] = $value;
+                    $this->filesAutoloaders[$dependency->getRelativePath()] = $value;
                 }
 
                 foreach ($value as $namespace => $namespace_relative_path) {

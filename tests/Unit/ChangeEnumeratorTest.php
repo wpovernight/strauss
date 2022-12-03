@@ -335,7 +335,7 @@ EOD;
 
         $dir = '';
         $composerPackage = $this->createMock(ComposerPackage::class);
-        $composerPackage->method('getName')->willReturn('brianhenryie/pdfhelpers');
+        $composerPackage->method( 'getPackageName' )->willReturn('brianhenryie/pdfhelpers');
         $relativeFilepaths = array( 'irrelevent' => $composerPackage);
 
         $changeEnumerator = new ChangeEnumerator($config);
@@ -354,7 +354,7 @@ EOD;
 
         $dir = '';
         $composerPackage = $this->createMock(ComposerPackage::class);
-        $composerPackage->method('getName')->willReturn('brianhenryie/pdfhelpers');
+        $composerPackage->method( 'getPackageName' )->willReturn('brianhenryie/pdfhelpers');
         $relativeFilepaths = array( 'path/to/file' => $composerPackage);
 
         $changeEnumerator = new ChangeEnumerator($config);

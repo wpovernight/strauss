@@ -58,7 +58,7 @@ class Prefixer
 
         foreach ($phpFileList as $sourceRelativeFilePathFromVendor => $package) {
             // Skip excluded namespaces.
-            if (in_array($package->getName(), $this->excludePackageNamesFromPrefixing)) {
+            if (in_array($package->getPackageName(), $this->excludePackageNamesFromPrefixing)) {
                 continue;
             }
 

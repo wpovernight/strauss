@@ -34,7 +34,7 @@ class LicenserTest extends TestCase
         $dependencies = array();
 
         $dependency = $this->createStub(ComposerPackage::class);
-        $dependency->method('getPath')->willReturn('developer-name/project-name/');
+        $dependency->method( 'getRelativePath' )->willReturn('developer-name/project-name/');
         $dependencies[] = $dependency;
 
         $sut = new Licenser($config, $workingDir, $dependencies, 'BrianHenryIE');
