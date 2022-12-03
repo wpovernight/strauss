@@ -41,7 +41,7 @@ class MozartIssue109Test extends IntegrationTestCase
   "extra": {
     "mozart": {
       "dep_namespace": "Mozart\\",
-      "dep_directory": "/strauss/",
+      "dep_directory": "/vendor-prefixed/",
       "delete_vendor_files": false,
       "exclude_packages": [
         "kylekatarnls/update-helper",
@@ -71,7 +71,7 @@ EOD;
 
         $result = $mozartCompose->run($inputInterfaceMock, $outputInterfaceMock);
 
-        $phpString = file_get_contents($this->testsWorkingDir .'strauss/nesbot/carbon/src/Carbon/Carbon.php');
+        $phpString = file_get_contents($this->testsWorkingDir .'vendor-prefixed/nesbot/carbon/src/Carbon/Carbon.php');
 
         $this->assertStringNotContainsString('*Mozart\\ This file is part of the Carbon package.Mozart\\', $phpString);
     }

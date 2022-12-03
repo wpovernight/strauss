@@ -53,7 +53,7 @@ EOD;
 
         $result = $strauss->run($inputInterfaceMock, $outputInterfaceMock);
 
-        $php_string = file_get_contents($this->testsWorkingDir . 'strauss/guzzlehttp/guzzle/src/BodySummarizer.php');
+        $php_string = file_get_contents($this->testsWorkingDir . 'vendor-prefixed/guzzlehttp/guzzle/src/BodySummarizer.php');
 
         $this->assertStringNotContainsString('? \GuzzleHttp\Psr7\Message::bodySummary($message)', $php_string);
         

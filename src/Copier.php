@@ -32,7 +32,7 @@ class Copier
     /** @var string */
     protected string $vendorDir;
 
-	/** @var array<string,array{dependency:ComposerPackage,sourceAbsoluteFilepath:string,targetRelativeFilepath:string}> */
+    /** @var array<string,array{dependency:ComposerPackage,sourceAbsoluteFilepath:string,targetRelativeFilepath:string}> */
     protected array $files;
 
     /** @var Filesystem */
@@ -46,7 +46,7 @@ class Copier
      * @param string $relativeTargetDir
      * @param string $vendorDir
      */
-    public function __construct( array $files, string $workingDir, string $relativeTargetDir, string $vendorDir)
+    public function __construct(array $files, string $workingDir, string $relativeTargetDir, string $vendorDir)
     {
         $this->files = $files;
 
@@ -70,7 +70,7 @@ class Copier
         if (! $this->filesystem->has($this->absoluteTargetDir)) {
             $this->filesystem->createDir($this->absoluteTargetDir);
         } else {
-            foreach ( array_keys( $this->files ) as $targetRelativeFilepath) {
+            foreach (array_keys($this->files) as $targetRelativeFilepath) {
                 $targetAbsoluteFilepath = $this->absoluteTargetDir . $targetRelativeFilepath;
 
                 if ($this->filesystem->has($targetAbsoluteFilepath)) {

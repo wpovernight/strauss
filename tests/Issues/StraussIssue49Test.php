@@ -50,14 +50,14 @@ class StraussIssue49Test extends \BrianHenryIE\Strauss\Tests\Integration\Util\In
 }
 EOD;
 
-		// 1. Git clone brianhenryie/bh-wp-logger into the temp dir.
-	    chdir($this->testsWorkingDir);
+        // 1. Git clone brianhenryie/bh-wp-logger into the temp dir.
+        chdir($this->testsWorkingDir);
 
-	    exec('git clone https://github.com/BrianHenryIE/bh-wp-logger.git');
+        exec('git clone https://github.com/BrianHenryIE/bh-wp-logger.git');
 
-		mkdir( $this->testsWorkingDir . 'project');
+        mkdir($this->testsWorkingDir . 'project');
 
-	    // 2. Create the project composer.json in a subdir (one level).
+        // 2. Create the project composer.json in a subdir (one level).
         file_put_contents($this->testsWorkingDir . 'project/composer.json', $composerJsonString);
 
         chdir($this->testsWorkingDir.'project');
@@ -73,5 +73,4 @@ EOD;
 
         $this->assertNotEquals(1, $result);
     }
-
 }

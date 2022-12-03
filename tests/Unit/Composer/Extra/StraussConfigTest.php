@@ -173,7 +173,7 @@ EOD;
 
         $sut = new StraussConfig($composer);
 
-        $this->assertEquals('strauss'. DIRECTORY_SEPARATOR, $sut->getTargetDirectory());
+        $this->assertEquals('vendor-prefixed'. DIRECTORY_SEPARATOR, $sut->getTargetDirectory());
     }
 
     /**

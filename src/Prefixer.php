@@ -57,8 +57,7 @@ class Prefixer
     {
 
         foreach ($phpFileArrays as $targetRelativeFilepath => $fileArray) {
-
-			$package = $fileArray['dependency'];
+            $package = $fileArray['dependency'];
 
             // Skip excluded namespaces.
             if (in_array($package->getPackageName(), $this->excludePackageNamesFromPrefixing)) {
@@ -72,8 +71,7 @@ class Prefixer
                 }
             }
 
-            $targetRelativeFilepathFromProject =
-                $this->targetDirectory. $targetRelativeFilepath;
+            $targetRelativeFilepathFromProject = $this->targetDirectory. $targetRelativeFilepath;
 
             // Throws an exception, but unlikely to happen.
             $contents = $this->filesystem->read($targetRelativeFilepathFromProject);
