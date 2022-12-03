@@ -110,9 +110,15 @@ class ComposerPackage
 
         $composerJsonFileAbsolute = $composer->getConfig()->getConfigSource()->getName();
 
+        $absolutePath = realpath(dirname($composerJsonFileAbsolute));
+        if (false !== $absolutePath) {
+            $this->packageAbsolutePath = $absolutePath . DIRECTORY_SEPARATOR;
+        }
+
         $vendorDirectory = $this->composer->getConfig()->get('vendor-dir');
         if (file_exists($vendorDirectory . DIRECTORY_SEPARATOR . $this->packageName)) {
             $this->relativePath = $this->packageName;
+            $this->packageAbsolutePath = realpath($vendorDirectory . DIRECTORY_SEPARATOR . $this->packageName) . DIRECTORY_SEPARATOR;
         } elseif (1 === preg_match('/.*\/([^\/]*\/[^\/]*)\/composer.json/', $composerJsonFileAbsolute, $output_array)) {
             // Not every package gets installed to a folder matching its name (crewlabs/unsplash).
             $this->relativePath = $output_array[1];

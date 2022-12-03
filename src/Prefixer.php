@@ -50,13 +50,16 @@ class Prefixer
     /**
      * @param array<string, string> $namespaceChanges
      * @param array<string, string> $classChanges
-     * @param array<string, ComposerPackage> $phpFileList
+     * @param array<string,array{dependency:ComposerPackage,sourceAbsoluteFilepath:string,targetRelativeFilepath:string}> $phpFileArrays
      * @throws FileNotFoundException
      */
-    public function replaceInFiles(array $namespaceChanges, array $classChanges, array $constants, array $phpFileList)
+    public function replaceInFiles(array $namespaceChanges, array $classChanges, array $constants, array $phpFileArrays)
     {
 
-        foreach ($phpFileList as $sourceRelativeFilePathFromVendor => $package) {
+        foreach ($phpFileArrays as $targetRelativeFilepath => $fileArray) {
+
+			$package = $fileArray['dependency'];
+
             // Skip excluded namespaces.
             if (in_array($package->getPackageName(), $this->excludePackageNamesFromPrefixing)) {
                 continue;
@@ -64,13 +67,13 @@ class Prefixer
 
             // Skip files whose filepath matches an excluded pattern.
             foreach ($this->excludeFilePatternsFromPrefixing as $excludePattern) {
-                if (1 === preg_match($excludePattern, $sourceRelativeFilePathFromVendor)) {
+                if (1 === preg_match($excludePattern, $targetRelativeFilepath)) {
                     continue 2;
                 }
             }
 
             $targetRelativeFilepathFromProject =
-                $this->targetDirectory. $sourceRelativeFilePathFromVendor;
+                $this->targetDirectory. $targetRelativeFilepath;
 
             // Throws an exception, but unlikely to happen.
             $contents = $this->filesystem->read($targetRelativeFilepathFromProject);
@@ -78,7 +81,7 @@ class Prefixer
             $updatedContents = $this->replaceInString($namespaceChanges, $classChanges, $constants, $contents);
 
             if ($updatedContents !== $contents) {
-                $this->changedFiles[$sourceRelativeFilePathFromVendor] = $package;
+                $this->changedFiles[$targetRelativeFilepath] = $package;
                 $this->filesystem->put($targetRelativeFilepathFromProject, $updatedContents);
             }
         }
