@@ -167,7 +167,7 @@ class Compose extends Command
                 $requiredComposerPackage = ComposerPackage::fromComposerJsonArray($requiredPackageComposerJson, $overrideAutoload);
             }
 
-            $this->flatDependencyTree[$requiredComposerPackage->getName()] = $requiredComposerPackage;
+            $this->flatDependencyTree[$requiredComposerPackage->getPackageName()] = $requiredComposerPackage;
             $nextRequiredPackageNames = $requiredComposerPackage->getRequiresNames();
             $this->recursiveGetAllDependencies($nextRequiredPackageNames);
         }
@@ -209,9 +209,9 @@ class Compose extends Command
 
         $this->changeEnumerator = new ChangeEnumerator($this->config);
 
-        $relativeTargetDir = $this->config->getTargetDirectory();
+        $absoluteTargetDir = $this->workingDir . $this->config->getTargetDirectory();
         $phpFiles = $this->fileEnumerator->getPhpFilesAndDependencyList();
-        $this->changeEnumerator->findInFiles($relativeTargetDir, $phpFiles);
+        $this->changeEnumerator->findInFiles($absoluteTargetDir, $phpFiles);
     }
 
     // 5. Update namespaces and class names.

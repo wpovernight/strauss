@@ -85,13 +85,14 @@ class ChangeEnumerator
     }
 
     /**
-     * @param string $dir
-     * @param array<string, ComposerPackage> $relativeFilepaths
+     * @param string $absoluteTargetDir
+     * @param array<string,array{dependency:ComposerPackage,sourceAbsoluteFilepath:string,targetRelativeFilepath:string}> $filesArray
      */
-    public function findInFiles($dir, $relativeFilepaths)
+    public function findInFiles($absoluteTargetDir, $filesArray)
     {
+//		$relativeFilepaths = array_keys( $filesArray );
 
-        foreach ($relativeFilepaths as $relativeFilepath => $package) {
+        foreach ($filesArray as $relativeFilepath => $package) {
             foreach ($this->excludePackagesFromPrefixing as $excludePackagesName) {
                 if ($package->getName() === $excludePackagesName) {
                     continue 2;
@@ -105,7 +106,7 @@ class ChangeEnumerator
             }
 
 
-            $filepath = $dir . $relativeFilepath;
+            $filepath = $absoluteTargetDir . $relativeFilepath;
 
             // TODO: use flysystem
             // $contents = $this->filesystem->read($targetFile);
