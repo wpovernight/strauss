@@ -129,7 +129,7 @@ class Licenser
 //                $relativeFilepath = str_replace($prefixToRemove, '', $filePath);
 
                 // Replace multiple \ and/or / with OS native DIRECTORY_SEPARATOR.
-	            $filePath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $filePath);
+                $filePath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $filePath);
 
                 $this->discoveredLicenseFiles[$filePath] = $dependency->getPackageName();
             }

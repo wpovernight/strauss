@@ -114,62 +114,61 @@ class FileEnumerator
                     if (is_file($packagePath . $namespace_relative_path)) {
                         //  $finder->files()->name($file)->in($source_path);
 
-	                    $sourceAbsoluteFilepath = $packagePath . $namespace_relative_path;
-	                    
+                        $sourceAbsoluteFilepath = $packagePath . $namespace_relative_path;
+                        
                         $outputRelativeFilepath = str_replace($prefixToRemove, '', $sourceAbsoluteFilepath);
                         $outputRelativeFilepath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $outputRelativeFilepath);
 
-	                    $file = array(
-		                    'dependency' => $dependency,
-		                    'sourceAbsoluteFilepath' => $sourceAbsoluteFilepath,
-		                    'targetRelativeFilepath' => $outputRelativeFilepath,
-	                    );
-	                    $this->filesWithDependencies[$outputRelativeFilepath] = $file;
-						continue;
+                        $file = array(
+                            'dependency' => $dependency,
+                            'sourceAbsoluteFilepath' => $sourceAbsoluteFilepath,
+                            'targetRelativeFilepath' => $outputRelativeFilepath,
+                        );
+                        $this->filesWithDependencies[$outputRelativeFilepath] = $file;
+                        continue;
                     } else {
-	                    // else it is a directory.
+                        // else it is a directory.
 
-	                    // trailingslashit().
-	                    $namespace_relative_path = rtrim( $namespace_relative_path, DIRECTORY_SEPARATOR )
-	                                               . DIRECTORY_SEPARATOR;
+                        // trailingslashit().
+                        $namespace_relative_path = rtrim($namespace_relative_path, DIRECTORY_SEPARATOR)
+                                                   . DIRECTORY_SEPARATOR;
 
-	                    $sourcePath = $packagePath . $namespace_relative_path;
+                        $sourcePath = $packagePath . $namespace_relative_path;
 
-	                    // trailingslashit(). (to remove duplicates).
-	                    $sourcePath = rtrim( $sourcePath, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR;
+                        // trailingslashit(). (to remove duplicates).
+                        $sourcePath = rtrim($sourcePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
-	                    $finder = new Finder();
-	                    $finder->files()->in( $sourcePath )->followLinks();
+                        $finder = new Finder();
+                        $finder->files()->in($sourcePath)->followLinks();
 
-	                    foreach ( $finder as $foundFile ) {
-		                    $sourceAbsoluteFilepath = $foundFile->getPathname();
+                        foreach ($finder as $foundFile) {
+                            $sourceAbsoluteFilepath = $foundFile->getPathname();
 
-		                    $outputRelativeFilepath = str_replace( $prefixToRemove, '', $sourceAbsoluteFilepath );
+                            $outputRelativeFilepath = str_replace($prefixToRemove, '', $sourceAbsoluteFilepath);
 
-		                    // TODO: Is this needed here?! If anything, it's the prefix that needs to be normalised a few
-		                    // lines above before being used.
-		                    // Replace multiple \ and/or / with OS native DIRECTORY_SEPARATOR.
-		                    $outputRelativeFilepath = preg_replace( '#[\\\/]+#', DIRECTORY_SEPARATOR, $outputRelativeFilepath );
+                            // TODO: Is this needed here?! If anything, it's the prefix that needs to be normalised a few
+                            // lines above before being used.
+                            // Replace multiple \ and/or / with OS native DIRECTORY_SEPARATOR.
+                            $outputRelativeFilepath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $outputRelativeFilepath);
 
-		                    foreach ( $this->excludeFilePatterns as $excludePattern ) {
-			                    if ( 1 === preg_match( $excludePattern, $outputRelativeFilepath ) ) {
-				                    continue 2;
-			                    }
-		                    }
+                            foreach ($this->excludeFilePatterns as $excludePattern) {
+                                if (1 === preg_match($excludePattern, $outputRelativeFilepath)) {
+                                    continue 2;
+                                }
+                            }
 
-							if( is_dir( $sourceAbsoluteFilepath ) ) {
-								continue;
-							}
+                            if (is_dir($sourceAbsoluteFilepath)) {
+                                continue;
+                            }
 
-		                    $file = array(
-			                    'dependency' => $dependency,
-			                    'sourceAbsoluteFilepath' => $sourceAbsoluteFilepath,
-			                    'targetRelativeFilepath' => $outputRelativeFilepath,
-		                    );
-		                    $this->filesWithDependencies[$outputRelativeFilepath] = $file;
-	                    }
+                            $file = array(
+                                'dependency' => $dependency,
+                                'sourceAbsoluteFilepath' => $sourceAbsoluteFilepath,
+                                'targetRelativeFilepath' => $outputRelativeFilepath,
+                            );
+                            $this->filesWithDependencies[$outputRelativeFilepath] = $file;
+                        }
                     }
-
                 }
             }
         }
@@ -192,7 +191,7 @@ class FileEnumerator
      */
     public function getPhpFilesAndDependencyList(): array
     {
-		// Filter out non .php files by checking the key.
+        // Filter out non .php files by checking the key.
         return array_filter($this->filesWithDependencies, function ($value, $key) {
             return false !== strpos($key, '.php');
         }, ARRAY_FILTER_USE_BOTH);
