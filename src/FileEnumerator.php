@@ -146,6 +146,11 @@ class FileEnumerator
 
                             $outputRelativeFilepath = str_replace($prefixToRemove, '', $sourceAbsoluteFilepath);
 
+							// For symlinked packages.
+							if( $outputRelativeFilepath == $sourceAbsoluteFilepath ) {
+								$outputRelativeFilepath = str_replace($packagePath, $dependency->getPackageName() . DIRECTORY_SEPARATOR, $sourceAbsoluteFilepath);
+							}
+
                             // TODO: Is this needed here?! If anything, it's the prefix that needs to be normalised a few
                             // lines above before being used.
                             // Replace multiple \ and/or / with OS native DIRECTORY_SEPARATOR.
