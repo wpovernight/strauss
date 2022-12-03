@@ -106,72 +106,78 @@ class FileEnumerator
                     $this->filesAutoloaders[$dependency->getRelativePath()] = $value;
                 }
 
-                foreach ($value as $namespace => $namespace_relative_path) {
+                foreach ($value as $namespace => $namespace_relative_paths) {
                     if (!empty($namespace) && in_array($namespace, $this->excludeNamespaces)) {
                         continue;
                     }
 
-                    if (is_file($packagePath . $namespace_relative_path)) {
-                        //  $finder->files()->name($file)->in($source_path);
+                    if (! is_array($namespace_relative_paths)) {
+                        $namespace_relative_paths = array( $namespace_relative_paths );
+                    }
 
-                        $sourceAbsoluteFilepath = $packagePath . $namespace_relative_path;
-                        
-                        $outputRelativeFilepath = str_replace($prefixToRemove, '', $sourceAbsoluteFilepath);
-                        $outputRelativeFilepath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $outputRelativeFilepath);
+                    foreach ($namespace_relative_paths as $namespace_relative_path) {
+                        if (is_file($packagePath . $namespace_relative_path)) {
+                            //  $finder->files()->name($file)->in($source_path);
 
-                        $file = array(
-                            'dependency' => $dependency,
-                            'sourceAbsoluteFilepath' => $sourceAbsoluteFilepath,
-                            'targetRelativeFilepath' => $outputRelativeFilepath,
-                        );
-                        $this->filesWithDependencies[$outputRelativeFilepath] = $file;
-                        continue;
-                    } else {
-                        // else it is a directory.
-
-                        // trailingslashit().
-                        $namespace_relative_path = rtrim($namespace_relative_path, DIRECTORY_SEPARATOR)
-                                                   . DIRECTORY_SEPARATOR;
-
-                        $sourcePath = $packagePath . $namespace_relative_path;
-
-                        // trailingslashit(). (to remove duplicates).
-                        $sourcePath = rtrim($sourcePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-
-                        $finder = new Finder();
-                        $finder->files()->in($sourcePath)->followLinks();
-
-                        foreach ($finder as $foundFile) {
-                            $sourceAbsoluteFilepath = $foundFile->getPathname();
+                            $sourceAbsoluteFilepath = $packagePath . $namespace_relative_path;
 
                             $outputRelativeFilepath = str_replace($prefixToRemove, '', $sourceAbsoluteFilepath);
-
-							// For symlinked packages.
-							if( $outputRelativeFilepath == $sourceAbsoluteFilepath ) {
-								$outputRelativeFilepath = str_replace($packagePath, $dependency->getPackageName() . DIRECTORY_SEPARATOR, $sourceAbsoluteFilepath);
-							}
-
-                            // TODO: Is this needed here?! If anything, it's the prefix that needs to be normalised a few
-                            // lines above before being used.
-                            // Replace multiple \ and/or / with OS native DIRECTORY_SEPARATOR.
                             $outputRelativeFilepath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $outputRelativeFilepath);
 
-                            foreach ($this->excludeFilePatterns as $excludePattern) {
-                                if (1 === preg_match($excludePattern, $outputRelativeFilepath)) {
-                                    continue 2;
-                                }
-                            }
-
-                            if (is_dir($sourceAbsoluteFilepath)) {
-                                continue;
-                            }
-
-                            $file = array(
-                                'dependency' => $dependency,
+                            $file                                                   = array(
+                                'dependency'             => $dependency,
                                 'sourceAbsoluteFilepath' => $sourceAbsoluteFilepath,
                                 'targetRelativeFilepath' => $outputRelativeFilepath,
                             );
-                            $this->filesWithDependencies[$outputRelativeFilepath] = $file;
+                            $this->filesWithDependencies[ $outputRelativeFilepath ] = $file;
+                            continue;
+                        } else {
+                            // else it is a directory.
+
+                            // trailingslashit().
+                            $namespace_relative_path = rtrim($namespace_relative_path, DIRECTORY_SEPARATOR)
+                                                       . DIRECTORY_SEPARATOR;
+
+                            $sourcePath = $packagePath . $namespace_relative_path;
+
+                            // trailingslashit(). (to remove duplicates).
+                            $sourcePath = rtrim($sourcePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+
+                            $finder = new Finder();
+                            $finder->files()->in($sourcePath)->followLinks();
+
+                            foreach ($finder as $foundFile) {
+                                $sourceAbsoluteFilepath = $foundFile->getPathname();
+
+                                $outputRelativeFilepath = str_replace($prefixToRemove, '', $sourceAbsoluteFilepath);
+
+                                // For symlinked packages.
+                                if ($outputRelativeFilepath == $sourceAbsoluteFilepath) {
+                                    $outputRelativeFilepath = str_replace($packagePath, $dependency->getPackageName() . DIRECTORY_SEPARATOR, $sourceAbsoluteFilepath);
+                                }
+
+                                // TODO: Is this needed here?! If anything, it's the prefix that needs to be normalised a few
+                                // lines above before being used.
+                                // Replace multiple \ and/or / with OS native DIRECTORY_SEPARATOR.
+                                $outputRelativeFilepath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $outputRelativeFilepath);
+
+                                foreach ($this->excludeFilePatterns as $excludePattern) {
+                                    if (1 === preg_match($excludePattern, $outputRelativeFilepath)) {
+                                        continue 2;
+                                    }
+                                }
+
+                                if (is_dir($sourceAbsoluteFilepath)) {
+                                    continue;
+                                }
+
+                                $file                                                   = array(
+                                    'dependency'             => $dependency,
+                                    'sourceAbsoluteFilepath' => $sourceAbsoluteFilepath,
+                                    'targetRelativeFilepath' => $outputRelativeFilepath,
+                                );
+                                $this->filesWithDependencies[ $outputRelativeFilepath ] = $file;
+                            }
                         }
                     }
                 }
