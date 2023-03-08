@@ -68,9 +68,6 @@ EOD;
 
         $this->assertEquals('BrianHenryIE_Strauss_', $sut->getClassmapPrefix());
 
-        // @see https://github.com/BrianHenryIE/strauss/issues/14
-        $this->assertContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
-
         $this->assertArrayHasKey('clancats/container', $sut->getOverrideAutoload());
 
         $this->assertFalse($sut->isDeleteVendorFiles());
@@ -473,7 +470,8 @@ EOD;
 
         $sut = new StraussConfig($composer);
 
-        $this->assertContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
+	    // Changed in v0.14.0.
+        $this->assertNotContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
     }
 
     /**
@@ -504,7 +502,8 @@ EOD;
 
         $sut = new StraussConfig($composer);
 
-        $this->assertContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
+		// Changed in v0.14.0.
+        self::assertNotContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
     }
 
     /**
