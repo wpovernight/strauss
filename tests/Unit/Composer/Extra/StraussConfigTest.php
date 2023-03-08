@@ -470,7 +470,7 @@ EOD;
 
         $sut = new StraussConfig($composer);
 
-	    // Changed in v0.14.0.
+        // Changed in v0.14.0.
         $this->assertNotContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
     }
 
@@ -502,7 +502,7 @@ EOD;
 
         $sut = new StraussConfig($composer);
 
-		// Changed in v0.14.0.
+        // Changed in v0.14.0.
         self::assertNotContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
     }
 
