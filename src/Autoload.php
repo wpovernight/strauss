@@ -46,6 +46,11 @@ class Autoload
 
     public function generate()
     {
+        // Do not overwrite Composer's autoload.php.
+        // The correct solution is to add "classmap": ["vendor"] to composer.json, then run composer dump-autoload.
+        if ($this->config->getTargetDirectory() === $this->config->getVendorDirectory()) {
+            return;
+        }
 
         if (! $this->config->isClassmapOutput()) {
             return;

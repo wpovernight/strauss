@@ -191,6 +191,10 @@ class Compose extends Command
     // 3. Copy autoloaded files for each
     protected function copyFiles()
     {
+        if ($this->config->getTargetDirectory() === $this->config->getVendorDirectory()) {
+            // Nothing to do.
+            return;
+        }
 
         $this->copier = new Copier(
             $this->fileEnumerator->getAllFilesAndDependencyList(),
@@ -250,6 +254,10 @@ class Compose extends Command
      */
     protected function generateAutoloader()
     {
+        if ($this->config->getTargetDirectory() === $this->config->getVendorDirectory()) {
+            // Nothing to do.
+            return;
+        }
 
         $files = $this->fileEnumerator->getFilesAutoloaders();
 
@@ -266,6 +274,10 @@ class Compose extends Command
      */
     protected function cleanUp()
     {
+        if ($this->config->getTargetDirectory() === $this->config->getVendorDirectory()) {
+            // Nothing to do.
+            return;
+        }
 
         $cleanup = new Cleanup($this->config, $this->workingDir);
 
