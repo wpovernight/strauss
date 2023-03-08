@@ -90,7 +90,8 @@ Strauss potentially requires zero configuration, but likely you'll want to custo
         },
         "namespace_replacement_patterns" : {
         },
-        "delete_vendor_files": false
+        "delete_vendor_packages": false
+        "delete_vendor_files": false,
     }
 },
 ```
@@ -105,7 +106,8 @@ The following configuration is inferred:
 
 The following configuration is default:
 
-- `delete_vendor_files`: `false` a boolean flag to indicate if files copied from the packages' vendor directories should be deleted after being processed. It defaults to false, so any destructive change is opt-in.
+- `delete_vendor_packages`: `false` a boolean flag to indicate if the packages' vendor directories should be deleted after being processed. It defaults to false, so any destructive change is opt-in.
+- `delete_vendor_files`: `false` a boolean flag to indicate if files copied from the packages' vendor directories should be deleted after being processed. It defaults to false, so any destructive change is opt-in. This is maybe deprecated! Is there any use to this that is more appropriate than `delete_vendor_packages`? 
 - `exclude_from_prefix` / [`file_patterns`](https://github.com/BrianHenryIE/strauss/blob/83484b79cfaa399bba55af0bf4569c24d6eb169d/src/ChangeEnumerator.php#L92-L96) : `[/psr.*/]` PSR namespaces are ignored by default for interoperability. If you override this key, be sure to include `/psr.*/` too.
 - `include_modified_date` is a `bool` to decide if Strauss should include a date in the (phpdoc) header written to modified files. Defaults to `true`.
 - `include_author` is a `bool` to decide if Strauss should include the author name in the (phpdoc) header written to modified files. Defaults to `true`.
