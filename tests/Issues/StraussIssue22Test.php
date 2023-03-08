@@ -45,6 +45,11 @@ class StraussIssue22Test extends \BrianHenryIE\Strauss\Tests\Integration\Util\In
       "namespace_prefix": "Strauss\\Issue22\\",
       "classmap_prefix": "Strauss_Issue22_"
     }
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
   }
 }
 EOD;
@@ -94,6 +99,11 @@ EOD;
     "strauss": {
       "namespace_prefix": "Strauss\\Issue22\\",
       "classmap_prefix": "Strauss_Issue22_"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true
     }
   }
 }
