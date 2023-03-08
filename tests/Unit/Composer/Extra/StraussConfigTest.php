@@ -68,9 +68,6 @@ EOD;
 
         $this->assertEquals('BrianHenryIE_Strauss_', $sut->getClassmapPrefix());
 
-        // @see https://github.com/BrianHenryIE/strauss/issues/14
-        $this->assertContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
-
         $this->assertArrayHasKey('clancats/container', $sut->getOverrideAutoload());
 
         $this->assertFalse($sut->isDeleteVendorFiles());
@@ -173,7 +170,7 @@ EOD;
 
         $sut = new StraussConfig($composer);
 
-        $this->assertEquals('strauss'. DIRECTORY_SEPARATOR, $sut->getTargetDirectory());
+        $this->assertEquals('vendor-prefixed'. DIRECTORY_SEPARATOR, $sut->getTargetDirectory());
     }
 
     /**
@@ -473,7 +470,8 @@ EOD;
 
         $sut = new StraussConfig($composer);
 
-        $this->assertContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
+	    // Changed in v0.14.0.
+        $this->assertNotContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
     }
 
     /**
@@ -504,7 +502,8 @@ EOD;
 
         $sut = new StraussConfig($composer);
 
-        $this->assertContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
+		// Changed in v0.14.0.
+        self::assertNotContains('/^psr.*$/', $sut->getExcludeFilePatternsFromPrefixing());
     }
 
     /**
@@ -728,5 +727,28 @@ EOD;
         $sut = new StraussConfig($composer);
 
         $this->assertFalse($sut->isIncludeAuthor());
+    }
+
+    public function testDeleteVendorPackages()
+    {
+
+        $composerExtraStraussJson = <<<'EOD'
+{
+ "extra":{
+  "strauss": {
+   "namespace_prefix": "BrianHenryIE\\Strauss\\",
+   "delete_vendor_packages": true
+  }
+ }
+}
+EOD;
+        $tmpfname = tempnam(sys_get_temp_dir(), 'strauss-test-');
+        file_put_contents($tmpfname, $composerExtraStraussJson);
+
+        $composer = Factory::create(new NullIO(), $tmpfname);
+
+        $sut = new StraussConfig($composer);
+
+        $this->assertTrue($sut->isDeleteVendorPackages());
     }
 }

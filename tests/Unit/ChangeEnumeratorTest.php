@@ -335,11 +335,15 @@ EOD;
 
         $dir = '';
         $composerPackage = $this->createMock(ComposerPackage::class);
-        $composerPackage->method('getName')->willReturn('brianhenryie/pdfhelpers');
-        $relativeFilepaths = array( 'irrelevent' => $composerPackage);
+        $composerPackage->method('getPackageName')->willReturn('brianhenryie/pdfhelpers');
+        $filesArray = array(
+            'irrelevantPath' => array(
+                'dependency' => $composerPackage
+            ),
+        );
 
         $changeEnumerator = new ChangeEnumerator($config);
-        $changeEnumerator->findInFiles($dir, $relativeFilepaths);
+        $changeEnumerator->findInFiles($dir, $filesArray);
 
         $this->assertEmpty($changeEnumerator->getDiscoveredNamespaceReplacements());
     }
@@ -354,11 +358,15 @@ EOD;
 
         $dir = '';
         $composerPackage = $this->createMock(ComposerPackage::class);
-        $composerPackage->method('getName')->willReturn('brianhenryie/pdfhelpers');
-        $relativeFilepaths = array( 'path/to/file' => $composerPackage);
+        $composerPackage->method('getPackageName')->willReturn('brianhenryie/pdfhelpers');
+        $filesArray = array(
+            'path/to/file' => array(
+                'dependency' => $composerPackage
+            ),
+        );
 
         $changeEnumerator = new ChangeEnumerator($config);
-        $changeEnumerator->findInFiles($dir, $relativeFilepaths);
+        $changeEnumerator->findInFiles($dir, $filesArray);
 
         $this->assertEmpty($changeEnumerator->getDiscoveredNamespaceReplacements());
     }

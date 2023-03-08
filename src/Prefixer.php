@@ -50,27 +50,28 @@ class Prefixer
     /**
      * @param array<string, string> $namespaceChanges
      * @param array<string, string> $classChanges
-     * @param array<string, ComposerPackage> $phpFileList
+     * @param array<string,array{dependency:ComposerPackage,sourceAbsoluteFilepath:string,targetRelativeFilepath:string}> $phpFileArrays
      * @throws FileNotFoundException
      */
-    public function replaceInFiles(array $namespaceChanges, array $classChanges, array $constants, array $phpFileList)
+    public function replaceInFiles(array $namespaceChanges, array $classChanges, array $constants, array $phpFileArrays)
     {
 
-        foreach ($phpFileList as $sourceRelativeFilePathFromVendor => $package) {
+        foreach ($phpFileArrays as $targetRelativeFilepath => $fileArray) {
+            $package = $fileArray['dependency'];
+
             // Skip excluded namespaces.
-            if (in_array($package->getName(), $this->excludePackageNamesFromPrefixing)) {
+            if (in_array($package->getPackageName(), $this->excludePackageNamesFromPrefixing)) {
                 continue;
             }
 
             // Skip files whose filepath matches an excluded pattern.
             foreach ($this->excludeFilePatternsFromPrefixing as $excludePattern) {
-                if (1 === preg_match($excludePattern, $sourceRelativeFilePathFromVendor)) {
+                if (1 === preg_match($excludePattern, $targetRelativeFilepath)) {
                     continue 2;
                 }
             }
 
-            $targetRelativeFilepathFromProject =
-                $this->targetDirectory. $sourceRelativeFilePathFromVendor;
+            $targetRelativeFilepathFromProject = $this->targetDirectory. $targetRelativeFilepath;
 
             // Throws an exception, but unlikely to happen.
             $contents = $this->filesystem->read($targetRelativeFilepathFromProject);
@@ -78,7 +79,7 @@ class Prefixer
             $updatedContents = $this->replaceInString($namespaceChanges, $classChanges, $constants, $contents);
 
             if ($updatedContents !== $contents) {
-                $this->changedFiles[$sourceRelativeFilePathFromVendor] = $package;
+                $this->changedFiles[$targetRelativeFilepath] = $package;
                 $this->filesystem->put($targetRelativeFilepathFromProject, $updatedContents);
             }
         }
@@ -87,6 +88,8 @@ class Prefixer
     public function replaceInString(array $namespacesChanges, array $classes, array $originalConstants, string $contents): string
     {
 
+        // Reorder this so substrings are always ahead of what they might be substrings of.
+        asort($namespacesChanges);
         foreach ($namespacesChanges as $originalNamespace => $replacement) {
             if (in_array($originalNamespace, $this->excludeNamespacesFromPrefixing)) {
                 continue;
@@ -96,6 +99,10 @@ class Prefixer
         }
 
         foreach ($classes as $originalClassname) {
+            if ('ReturnTypeWillChange' === $originalClassname) {
+                continue;
+            }
+
             $classmapPrefix = $this->classmapPrefix;
 
             $contents = $this->replaceClassname($contents, $originalClassname, $classmapPrefix);
@@ -145,6 +152,9 @@ class Prefixer
             |\|\s*
             |!\s*                             # negating the result of a static call
             |=>\s*                            # as the value in an associative array
+            |\[\s*                         # In a square array 
+            |\?\s*                         # In a ternary operator
+            |:\s*                          # In a ternary operator
             )
             (
             {$searchNamespace}             # followed by the namespace to replace

@@ -72,6 +72,7 @@ class ChangeEnumerator
      */
     public function getDiscoveredClasses(): array
     {
+        unset($this->discoveredClasses['ReturnTypeWillChange']);
         return array_keys($this->discoveredClasses);
     }
 
@@ -84,15 +85,17 @@ class ChangeEnumerator
     }
 
     /**
-     * @param string $dir
-     * @param array<string, ComposerPackage> $relativeFilepaths
+     * @param string $absoluteTargetDir
+     * @param array<string,array{dependency:ComposerPackage,sourceAbsoluteFilepath:string,targetRelativeFilepath:string}> $filesArray
      */
-    public function findInFiles($dir, $relativeFilepaths)
+    public function findInFiles($absoluteTargetDir, $filesArray)
     {
+//      $relativeFilepaths = array_keys( $filesArray );
 
-        foreach ($relativeFilepaths as $relativeFilepath => $package) {
+        foreach ($filesArray as $relativeFilepath => $fileArray) {
+            $package = $fileArray['dependency'];
             foreach ($this->excludePackagesFromPrefixing as $excludePackagesName) {
-                if ($package->getName() === $excludePackagesName) {
+                if ($package->getPackageName() === $excludePackagesName) {
                     continue 2;
                 }
             }
@@ -104,7 +107,7 @@ class ChangeEnumerator
             }
 
 
-            $filepath = $dir . $relativeFilepath;
+            $filepath = $absoluteTargetDir . $relativeFilepath;
 
             // TODO: use flysystem
             // $contents = $this->filesystem->read($targetFile);

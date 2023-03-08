@@ -72,7 +72,7 @@ class Licenser
         $this->includeModifiedDate = $config->isIncludeModifiedDate();
         $this->includeAuthor = $config->isIncludeAuthor();
 
-        $this->filesystem = new Filesystem(new Local($workingDir));
+        $this->filesystem = new Filesystem(new Local('/'));
     }
 
     public function copyLicenses(): void
@@ -115,7 +115,8 @@ class Licenser
 
         /** @var ComposerPackage $dependency */
         foreach ($this->dependencies as $dependency) {
-            $packagePath = $this->vendorDir . $dependency->getPath();
+            $packagePath = $dependency->getPackageAbsolutePath();
+
 
             // If packages happen to have their vendor dir, i.e. locally required packages, don't included the licenses
             // from their vendor dir (they should be included otherwise anyway).
@@ -126,12 +127,12 @@ class Licenser
             foreach ($finder as $foundFile) {
                 $filePath = $foundFile->getPathname();
 
-                $relativeFilepath = str_replace($prefixToRemove, '', $filePath);
+//                $relativeFilepath = str_replace($prefixToRemove, '', $filePath);
 
                 // Replace multiple \ and/or / with OS native DIRECTORY_SEPARATOR.
-                $relativeFilepath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $relativeFilepath);
+                $filePath = preg_replace('#[\\\/]+#', DIRECTORY_SEPARATOR, $filePath);
 
-                $this->discoveredLicenseFiles[$relativeFilepath] = $dependency->getName();
+                $this->discoveredLicenseFiles[$filePath] = $dependency->getPackageName();
             }
         }
     }
@@ -151,7 +152,7 @@ class Licenser
         $date = gmdate("d-F-Y", time());
 
         foreach ($modifiedFiles as $relativeFilePath => $package) {
-            $filepath = $this->targetDirectory . $relativeFilePath;
+            $filepath = $this->workingDir . $this->targetDirectory . $relativeFilePath;
 
             $packageLicense = $package->getLicense();
 
