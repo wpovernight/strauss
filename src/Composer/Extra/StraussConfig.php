@@ -71,7 +71,7 @@ class StraussConfig
     /**
      * @var array{packages: string[], namespaces: string[], filePatterns: string[]}
      */
-    protected array $excludeFromPrefix = array('file_patterns'=>array('/^psr.*$/'),'namespaces'=>array(),'packages'=>array());
+    protected array $excludeFromPrefix = array('file_patterns'=>array(),'namespaces'=>array(),'packages'=>array());
 
     /**
      * An array of autoload keys to replace packages' existing autoload key.
