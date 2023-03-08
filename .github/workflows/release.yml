@@ -24,7 +24,7 @@ jobs:
 
       - name: Create .phar
         run: |
-          wget -O phar-composer.phar https://github.com/clue/phar-composer/releases/download/v1.2.0/phar-composer-1.2.0.phar
+          wget -O phar-composer.phar https://github.com/clue/phar-composer/releases/download/v1.4.0/phar-composer-1.4.0.phar
           mkdir build
           mv vendor build/vendor
           mv src build/src
@@ -43,6 +43,7 @@ jobs:
 
       - name: Sign the PHAR
         run: |
+          ls strauss.phar
           gpg --local-user BrianHenryIE@gmail.com \
               --batch \
               --yes \
