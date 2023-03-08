@@ -729,4 +729,27 @@ EOD;
 
         $this->assertFalse($sut->isIncludeAuthor());
     }
+
+    public function testDeleteVendorPackages()
+    {
+
+        $composerExtraStraussJson = <<<'EOD'
+{
+ "extra":{
+  "strauss": {
+   "namespace_prefix": "BrianHenryIE\\Strauss\\",
+   "delete_vendor_packages": true
+  }
+ }
+}
+EOD;
+        $tmpfname = tempnam(sys_get_temp_dir(), 'strauss-test-');
+        file_put_contents($tmpfname, $composerExtraStraussJson);
+
+        $composer = Factory::create(new NullIO(), $tmpfname);
+
+        $sut = new StraussConfig($composer);
+
+        $this->assertTrue($sut->isDeleteVendorPackages());
+    }
 }

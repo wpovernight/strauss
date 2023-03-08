@@ -71,7 +71,7 @@ class StraussConfig
     /**
      * @var array{packages: string[], namespaces: string[], filePatterns: string[]}
      */
-    protected array $excludeFromPrefix = array('file_patterns'=>array('/^psr.*$/'),'namespaces'=>array(),'packages'=>array());
+    protected array $excludeFromPrefix = array('file_patterns'=>array(),'namespaces'=>array(),'packages'=>array());
 
     /**
      * An array of autoload keys to replace packages' existing autoload key.
@@ -86,12 +86,20 @@ class StraussConfig
     protected $overrideAutoload = [];
 
     /**
-     * After completing `strauss compose` should the source files be deleted?
+     * After completing prefixing should the source files be deleted?
      * This does not affect symlinked directories.
      *
      * @var bool
      */
     protected $deleteVendorFiles = false;
+
+    /**
+     * After completing prefixing should the source packages be deleted?
+     * This does not affect symlinked directories.
+     *
+     * @var bool
+     */
+    protected $deleteVendorPackages = false;
 
     protected bool $classmapOutput;
 
@@ -143,7 +151,8 @@ class StraussConfig
             $rename->addMapping(StraussConfig::class, 'dep_namespace', 'namespacePrefix');
 
             $rename->addMapping(StraussConfig::class, 'exclude_packages', 'excludePackages');
-            $rename->addMapping(StraussConfig::class, 'delete_vendor_directories', 'deleteVendorFiles');
+            $rename->addMapping(StraussConfig::class, 'delete_vendor_files', 'deleteVendorFiles');
+            $rename->addMapping(StraussConfig::class, 'delete_vendor_packages', 'deleteVendorPackages');
 
             $rename->addMapping(StraussConfig::class, 'exclude_prefix_packages', 'excludePackagesFromPrefixing');
 
@@ -411,11 +420,27 @@ class StraussConfig
     }
 
     /**
+     * @return bool
+     */
+    public function isDeleteVendorPackages(): bool
+    {
+        return $this->deleteVendorPackages;
+    }
+
+    /**
      * @param bool $deleteVendorFiles
      */
     public function setDeleteVendorFiles(bool $deleteVendorFiles): void
     {
         $this->deleteVendorFiles = $deleteVendorFiles;
+    }
+
+    /**
+     * @param bool $deleteVendorPackages
+     */
+    public function setDeleteVendorPackages(bool $deleteVendorPackages): void
+    {
+        $this->deleteVendorPackages = $deleteVendorPackages;
     }
 
     /**
