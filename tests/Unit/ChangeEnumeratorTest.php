@@ -38,7 +38,7 @@ EOD;
 
         $sut->find($validPhp);
 
-        $this->assertArrayHasKey('MyNamespace', $sut->getDiscoveredNamespaceReplacements(), 'Found: ' . implode(',',$sut->getDiscoveredNamespaceReplacements()));
+        $this->assertArrayHasKey('MyNamespace', $sut->getDiscoveredNamespaceReplacements(), 'Found: ' . implode(',', $sut->getDiscoveredNamespaceReplacements()));
         $this->assertContains('Prefix\MyNamespace', $sut->getDiscoveredNamespaceReplacements());
 
         $this->assertNotContains('MyClass', $sut->getDiscoveredClasses());
@@ -465,9 +465,10 @@ EOD;
         $this->assertContains('ANOTHER_CONSTANT', $constants);
     }
 
-	public function test_commented_namespace_is_invalid(): void {
+    public function test_commented_namespace_is_invalid(): void
+    {
 
-		$contents = <<<'EOD'
+        $contents = <<<'EOD'
 <?php
 
 // Global. - namespace WPGraphQL;
@@ -486,11 +487,11 @@ final class WPGraphQL {
 }
 EOD;
 
-		$config = $this->createMock(StraussConfig::class);
-		$changeEnumerator = new ChangeEnumerator($config);
-		$changeEnumerator->find($contents);
+        $config = $this->createMock(StraussConfig::class);
+        $changeEnumerator = new ChangeEnumerator($config);
+        $changeEnumerator->find($contents);
 
-		self::assertArrayNotHasKey( 'WPGraphQL', $changeEnumerator->getDiscoveredNamespaceReplacements() );
-		self::assertContains( 'WPGraphQL', $changeEnumerator->getDiscoveredClasses() );
-	}
+        self::assertArrayNotHasKey('WPGraphQL', $changeEnumerator->getDiscoveredNamespaceReplacements());
+        self::assertContains('WPGraphQL', $changeEnumerator->getDiscoveredClasses());
+    }
 }

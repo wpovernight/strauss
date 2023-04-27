@@ -51,8 +51,8 @@ EOD;
 
         $result = $strauss->run($inputInterfaceMock, $outputInterfaceMock);
 
-	    $php_string = file_get_contents($this->testsWorkingDir . 'vendor-prefixed/wp-graphql/wp-graphql/src/WPGraphQL.php');
+        $php_string = file_get_contents($this->testsWorkingDir . 'vendor-prefixed/wp-graphql/wp-graphql/src/WPGraphQL.php');
 
-	    $this->assertStringContainsString('final class Prefix_WPGraphQL', $php_string);
+        $this->assertStringContainsString('final class Prefix_WPGraphQL', $php_string);
     }
 }
