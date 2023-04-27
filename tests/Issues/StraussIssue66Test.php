@@ -20,7 +20,7 @@ class StraussIssue66Test extends \BrianHenryIE\Strauss\Tests\Integration\Util\In
 
     /**
      */
-    public function test_aws_prefixed_functions()
+    public function test_wp_graphql_prefix_main_class()
     {
 
         $composerJsonString = <<<'EOD'
